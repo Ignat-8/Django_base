@@ -1,0 +1,14 @@
+[
+    {
+        "href": "index",
+        "name": "домой"
+    },
+    {
+        "href": "products",
+        "name": "продукты"
+    },
+    {
+        "href": "contact",
+        "name": "контакты"
+    }
+]
