@@ -1,13 +1,13 @@
 from django.shortcuts import render
 import json
+
 # Create your views here.
 
-
-with open('templates/mainapp/main_menu.json', 'r', encoding='utf-8') as file:
+with open('..\\geekshop\\mainapp\\templates\\mainapp\\include\\main_menu.json', 'r', encoding='utf-8') as file:
     main_menu = json.load(file)
 
 
-with open('templates/mainapp/products_menu.json', 'r', encoding='utf-8') as file:
+with open('..\\geekshop\\mainapp\\templates\\mainapp\\include\\products_menu.json', 'r', encoding='utf-8') as file:
     products_menu = json.load(file)
 
 
