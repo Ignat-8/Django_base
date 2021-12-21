@@ -1,14 +1,17 @@
 [
     {
         "href": "index",
-        "name": "домой"
+        "name": "домой",
+		"namespace": ""
     },
     {
         "href": "products",
-        "name": "продукты"
+        "name": "продукты",
+		"namespace": "products"
     },
     {
         "href": "contact",
-        "name": "контакты"
+        "name": "контакты",
+		"namespace": ""
     }
 ]
