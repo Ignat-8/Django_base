@@ -1,0 +1,39 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block div_products %}
+{{ request.resolver_match }}<br>
+kwargs = {{ request.resolver_match.kwargs }}
+<div class="hero-white">
+    <div class="header clearfix">
+        <a href="/" class="logo"></a>
+        {% include 'mainapp/include/menu.html' %}
+        <a href="#" class="search"></a>
+        <a href="#" class="basket"></a>
+    </div>
+</div>
+
+<div class="details">
+    <div class="products_list">
+        <div class="title clearfix">
+            <h2>
+                Категория: "{{ category }}"
+            </h2>
+        </div><br>
+        <div class="category-products clearfix">
+            {% for product in products %}
+            <div class="block">
+                <a href="#">
+                    <img src="{% static 'img/' %}{{ product.image }}" alt="product">
+                    <div class="text">
+                        <img src="{% static 'img/icon-hover.png' %}" alt="hover">
+                        <h4>{{ product.name }}</h4>
+                        <p>{{ product.description }}</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="clr"></div>
+{% endblock %}
