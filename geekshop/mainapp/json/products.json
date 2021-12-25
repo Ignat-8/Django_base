@@ -6,7 +6,7 @@
         "description": "товары всех категорий",
         "price": 1000,
         "quantity": 10,
-        "category_id": 1
+        "category_id": 5
     },
     {
         "name": "product-2",
@@ -51,7 +51,7 @@
         "description": "товары всех категорий",
         "price": 2000,
         "quantity": 1,
-        "category_id": 1
+        "category_id": 5
     },
     {
         "name": "product-7",
@@ -78,7 +78,7 @@
         "description": "товары всех категорий",
         "price": 1200,
         "quantity": 10,
-        "category_id": 1
+        "category_id": 5
     },
     {
         "name": "product-10",

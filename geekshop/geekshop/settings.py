@@ -38,11 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'mainapp',
-    'authapp'
+    'authapp',
+    'cartapp'
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -133,3 +136,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Auth
 AUTH_USER_MODEL = 'authapp.ShopUser'
+
+# Debug toolbar
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
