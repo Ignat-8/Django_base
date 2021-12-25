@@ -1,0 +1,92 @@
+[
+    {
+        "name": "product-1",
+        "image": "product-1.jpg",
+        "short_desc": "product-1",
+        "description": "товары всех категорий",
+        "price": 1000,
+        "quantity": 10,
+        "category_id": 5
+    },
+    {
+        "name": "product-2",
+        "image": "product-2.jpg",
+        "short_desc": "product-2",
+        "description": "товары всех категорий",
+        "price": 1300,
+        "quantity": 4,
+        "category_id": 2
+    },
+    {
+        "name": "product-3",
+        "image": "product-3.jpg",
+        "short_desc": "product-3",
+        "description": "товары всех категорий",
+        "price": 1040,
+        "quantity": 7,
+        "category_id": 2
+    },
+    {
+        "name": "product-4",
+        "image": "product-4.jpg",
+        "short_desc": "product-4",
+        "description": "товары всех категорий",
+        "price": 3000,
+        "quantity": 10,
+        "category_id": 3
+    },
+    {
+        "name": "product-5",
+        "image": "product-5.jpg",
+        "short_desc": "product-5",
+        "description": "товары всех категорий",
+        "price": 1000,
+        "quantity": 9,
+        "category_id": 3
+    },
+    {
+        "name": "product-6",
+        "image": "product-6.jpg",
+        "short_desc": "product-6",
+        "description": "товары всех категорий",
+        "price": 2000,
+        "quantity": 1,
+        "category_id": 5
+    },
+    {
+        "name": "product-7",
+        "image": "product-7.jpg",
+        "short_desc": "product-7",
+        "description": "товары всех категорий",
+        "price": 1200,
+        "quantity": 15,
+        "category_id": 4
+    },
+    {
+        "name": "product-8",
+        "image": "product-8.jpg",
+        "short_desc": "product-8",
+        "description": "товары всех категорий",
+        "price": 1500,
+        "quantity": 13,
+        "category_id": 4
+    },
+    {
+        "name": "product-9",
+        "image": "product-9.jpg",
+        "short_desc": "product-9",
+        "description": "товары всех категорий",
+        "price": 1200,
+        "quantity": 10,
+        "category_id": 5
+    },
+    {
+        "name": "product-10",
+        "image": "product-10.jpg",
+        "short_desc": "product-10",
+        "description": "товары всех категорий",
+        "price": 1100,
+        "quantity": 10,
+        "category_id": 4
+    }
+]
