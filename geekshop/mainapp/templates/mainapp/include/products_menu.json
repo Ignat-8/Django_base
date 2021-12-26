@@ -1,22 +1,22 @@
 [
     {
-        "href": "#",
+        "href": "products/0",
         "name": "все"
     },
     {
-        "href": "#",
+        "href": "products/1",
         "name": "дом"
     },
     {
-        "href": "#",
+        "href": "products/2",
         "name": "офис"
     },
     {
-        "href": "#",
+        "href": "products/3",
         "name": "модерн"
     },
     {
-        "href": "#",
+        "href": "products/4",
         "name": "классика"
     }
 ]

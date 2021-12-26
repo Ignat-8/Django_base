@@ -1,14 +1,20 @@
 [
     {
         "href": "index",
-        "name": "домой"
+        "route": "",
+        "name": "домой",
+        "namespace": ""
     },
     {
-        "href": "products",
-        "name": "продукты"
+        "href": "products:index",
+        "route": "products/",
+        "name": "продукты",
+        "namespace": "products"
     },
     {
         "href": "contact",
-        "name": "контакты"
+        "route": "contact/",
+        "name": "контакты",
+        "namespace": ""
     }
 ]
