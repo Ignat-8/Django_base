@@ -30,7 +30,7 @@
 	<div class="tab-content">
 		<div class="block">
 			<a href="{% url 'products:index' %}{{ products1.category_id }}">
-				<img src="{% static 'img/' %}{{ products1.image }}" alt="" class="block_img">
+				<img src="/media/{{ products1.image }}" alt="" class="block_img">
 				<div class="text">
 					<img src="{% static 'img/icon-hover.png' %}" alt="img">
 					<h4>{{ products1.short_desc }}</h4>
@@ -40,7 +40,7 @@
 		</div>
 		<div class="block">
 			<a href="{% url 'products:index' %}{{ products2.category_id }}">
-				<img src="{% static 'img/' %}{{ products2.image }}" alt="" class="block_img">
+				<img src="/media/{{ products2.image }}" alt="" class="block_img">
 				<div class="text">
 					<img src="{% static 'img/icon-hover.png' %}" alt="">
 					<h4>{{ products2.short_desc }}</h4>

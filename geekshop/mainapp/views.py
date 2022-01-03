@@ -18,8 +18,8 @@ def main(request):
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user)
 
-    ProductCategories = ProductCategory.objects.all()
-    products = Product.objects.all()
+    ProductCategories = ProductCategory.objects.filter(is_active=True)
+    products = Product.objects.filter(is_active=True)
     pk1 = random.randint(1, len(ProductCategories))
     pk2 = random.randint(1, len(ProductCategories))
     return render(request, 'mainapp/index.html', 
@@ -36,7 +36,7 @@ def main(request):
 
 def products(request, pk=None):
     title = 'продукты'
-    ProductCategories = ProductCategory.objects.all()
+    ProductCategories = ProductCategory.objects.filter(is_active=True)
     
     cart = []
     if request.user.is_authenticated:
@@ -51,9 +51,10 @@ def products(request, pk=None):
                       left join (select cc.*
 			                     from cartapp_cart cc
 			                     join authapp_shopuser sh on cc.user_id=sh.id
-			                     where sh.username='{request.user}') t2 on t2.product_id=t1.id'''
+			                     where sh.username='{request.user}') t2 on t2.product_id=t1.id
+                        where t1.is_active=True'''
         else:
-            category = get_object_or_404(ProductCategory, pk=pk)
+            category = get_object_or_404(ProductCategory, pk=pk, is_active=True)
             #products = Product.objects.filter(category__pk=pk).order_by('price')
             sql = f'''select t1.*, t2.quantity as cart_quantity
                             , case when t2.id is null then 0 else t2.quantity*t1.price end as total_price
@@ -62,7 +63,7 @@ def products(request, pk=None):
 			                     from cartapp_cart cc
 			                     join authapp_shopuser sh on cc.user_id=sh.id
 			                     where sh.username='{request.user}') t2 on t2.product_id=t1.id 
-                      where t1.category_id={pk}'''
+                      where t1.category_id={pk} and t1.is_active=True'''
 
         products = Product.objects.raw(sql)
         
@@ -80,7 +81,7 @@ def products(request, pk=None):
                                 'cart': cart,
                                 })
 
-    products = Product.objects.all()
+    products = Product.objects.filter(is_active=True)
     hot_product = random.sample(list(products), 1)[0]
     same_products = Product.objects.filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
 
@@ -88,7 +89,6 @@ def products(request, pk=None):
                         context={'main_menu': main_menu,
                                 'title': title,
                                 'ProductCategories': ProductCategories,
-                                'products': products,
                                 'cart':cart,
                                 'hot_product': hot_product,
                                 'same_products': same_products
@@ -111,7 +111,7 @@ def contact(request):
 
 def product(request, pk):
     title = 'продукты'
-    ProductCategories = ProductCategory.objects.all()
+    ProductCategories = ProductCategory.objects.filter(is_active=True)
     product = get_object_or_404(Product, pk=pk)
     cart = []
     if request.user.is_authenticated:

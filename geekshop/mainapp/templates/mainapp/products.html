@@ -17,24 +17,24 @@
 	<div class="details-products">
 		<div class="details-slider">
 			<div class="slider-product">
-				<img src="{% static 'img/' %}{{ hot_product.image }}" class="big_img">
+				<img src="/media/{{ hot_product.image }}" class="big_img">
 			</div>
 			<div class="slider-control">
 				<div class="block">
 					<a href="#">
-						<img src="{% static 'img/' %}{{ hot_product.image }}" alt="" class="small_img">
+						<img src="/media/{{ hot_product.image }}" alt="" class="small_img">
 						<div class="text"></div>
 					</a>
 				</div>
 				<div class="block">
 					<a href="#">
-						<img src="{% static 'img/' %}{{ hot_product.image }}" alt="" class="small_img">
+						<img src="/media/{{ hot_product.image }}" alt="" class="small_img">
 						<div class="text"></div>
 					</a>
 				</div>
 				<div class="block">
 					<a href="#">
-						<img src="{% static 'img/' %}{{ hot_product.image }}" alt="" class="small_img">
+						<img src="/media/{{ hot_product.image }}" alt="" class="small_img">
 						<div class="text"></div>
 					</a>
 				</div>
@@ -69,7 +69,7 @@
 			{% for product in same_products %}
 			<div class="block">
 				<a href="#">
-					<img src="{% static 'img/' %}{{ product.image }}" alt="" class="block_img">
+					<img src="/media/{{ product.image }}" alt="" class="block_img">
 					<div class="text">
 						<img src="{% static 'img/icon-hover.png' %}" alt="img">
 						<h4>{{ product.description }}</h4>

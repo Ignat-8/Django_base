@@ -1196,3 +1196,7 @@ td:first-child {
 	background-color: #d41306;
 }
 
+.product_record.not_active {
+	opacity: 0.5;
+	background-color: #d41306;
+}
