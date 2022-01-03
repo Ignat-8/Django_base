@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'mainapp',
     'authapp',
-    'cartapp'
+    'cartapp',
+    'adminapp'
 ]
 
 MIDDLEWARE = [

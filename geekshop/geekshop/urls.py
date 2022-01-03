@@ -25,7 +25,8 @@ urlpatterns = [
     path('', mainapp.main, name='index'),
     path('products/', include('mainapp.urls', namespace='products')),
     path('contact/', mainapp.contact, name='contact'),
-    path('admin/', admin.site.urls),
+    #path('admin/', admin.site.urls),
+    path('admin/', include('adminapp.urls', namespace='admin')),  # own admin app
     path('auth/', include('authapp.urls', namespace='auth')),
     path('cart/', include('cartapp.urls', namespace='cart')),
     path('__debug__/', include('debug_toolbar.urls')),
