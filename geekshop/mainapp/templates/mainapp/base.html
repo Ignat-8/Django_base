@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Магазин</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'fonts/font-awesome/css/font-awesome.css' %}">
 </head>
@@ -18,6 +18,12 @@
         {% endblock %}
 
         {% block div_products %}
+        {% endblock %}
+
+        {% block product %}
+        {% endblock %}
+
+        {% block cart %}
         {% endblock %}
         <div class="clr"></div>
     </div>

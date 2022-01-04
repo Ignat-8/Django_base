@@ -1,0 +1,61 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block div_products %}
+<div class="hero-white">
+    <div class="header clearfix">
+        <a href="/" class="logo"></a>
+        {% include 'mainapp/include/menu.html' %}
+    </div>
+</div>
+
+<div class="details">
+    <div class="links clearfix">
+        {% include 'mainapp/include/products_menu.html' %}
+    </div>
+
+    <div class="products_list">
+        <h3>Навигация:</h3>
+        <div class="paginator">
+            {% if products.has_previous %}
+            <a href="{% url 'products:category' pk products.previous_page_number %}">
+                < </a>
+                    {% endif %}
+                    <span class="current">
+                        страница {{ products.number }} из {{ products.paginator.num_pages }}
+                    </span>
+                    {% if products.has_next %}
+                    <a href="{% url 'products:category' pk products.next_page_number %}"> > </a>
+                    {% endif %}
+        </div>
+    </div>
+
+    <div class="tab-content">
+        {% for product in products %}
+        <div class="block-content">
+            <div class="block">
+                <a href="{% url 'products:product' product.id %}">
+                    <img src="/media/{{ product.image }}" alt="product" class="block_img">
+                    <div class="text">
+                        <img src="{% static 'img/icon-hover.png' %}" alt="hover">
+                        <h4>{{ product.name }}</h4>
+                        <p>{{ product.description }}</p>
+                        <p>подробное описание</p>
+                    </div>
+                </a>
+            </div>
+            <div class="">
+                <br>{{ product.name }}<br>
+                стоимость {{ product.price_format }} руб.<br>
+                {% if user.is_authenticated %}
+                в корзине {{ product.cart_quantity }} шт.
+                <a href="{% url 'cart:add' product.id %}" style="font-size:20pt; text-decoration: none;">+</a>
+                <a href="{% url 'cart:minus' product.id %}" style="font-size:30pt; text-decoration: none;">-</a>
+                <br>
+                общая стоимость {{ product.total_price }} руб.<br>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
