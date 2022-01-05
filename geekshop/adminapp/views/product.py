@@ -1,10 +1,12 @@
 from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import user_passes_test
-from django.urls import reverse
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from mainapp.models import Product, ProductCategory
-from adminapp.forms import ProductEditForm
 
 
 def check_is_superuser(user):
@@ -14,85 +16,105 @@ def check_is_superuser(user):
         return True
 
 
-@user_passes_test(check_is_superuser)
-def products(request, pk, page=1):
-    title = 'админка/продукт'
-    category = get_object_or_404(ProductCategory, pk=pk)
-    if pk==1:
-        products_list = Product.objects.all().order_by('name')
-    else:
-        products_list = Product.objects.filter(category__pk=pk).order_by('name')
+class ProductListView(ListView):
+    model = Product
+    template_name = 'adminapp/products.html'
+    paginate_by = 2
+    # self.kwargs['pk'] - здесь это номер категории, из которой выводятся продукты
+
+    def get_queryset(self):
+        if self.kwargs['pk'] != 1:
+            return Product.objects.filter(category=self.kwargs['pk'])
+        else:
+            return Product.objects.all()
     
-    paginator = Paginator(products_list, 3)
-    try:
-        products_paginator = paginator.page(page)
-    except PageNotAnInteger:
-        products_paginator = paginator.page(1)
-    except EmptyPage:
-        products_paginator = paginator.page(paginator.num_pages)
+    def get_category_name(self):
+        return list(ProductCategory.objects.filter(id=self.kwargs['pk']))[0]
 
-    content = {
-        'title': title,
-        'category': category,
-        'objects': products_paginator,
-        }
-    return render(request, 'adminapp/products.html', content)
-
-
-@user_passes_test(check_is_superuser)
-def product_create(request, pk):
-    title = 'продукт/создание'
-    category = get_object_or_404(ProductCategory, pk=pk)
-
-    if request.method == 'POST':
-        product_form = ProductEditForm(request.POST, request.FILES)
-        if product_form.is_valid():
-            product_form.save()
-            return HttpResponseRedirect(reverse('admin:products', args=[pk, 1]))
-    else:
-        product_form = ProductEditForm(initial={'category': category})
-
-    content = {'title': title, 
-                'update_form': product_form, 
-                'category': category,
-                'pk': pk}
-    return render(request, 'adminapp/product_update.html', content)
-
-
-@user_passes_test(check_is_superuser)
-def product_read(request, pk):
-    title = 'продукт/описание'
-    product = get_object_or_404(Product, pk=pk)
-    content = {'title': title, 'object': product}
-    return render(request, 'adminapp/product_read.html', content)
-
-
-@user_passes_test(check_is_superuser)
-def product_update(request, pk):
-    title = 'продукт/редактирование'
-    edit_product = get_object_or_404(Product, pk=pk)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'продукты/категории'
+        context['category_id'] = self.kwargs['pk']
+        context['category_name'] = self.get_category_name()
+        return context
     
-    if request.method == 'POST':
-        edit_form = ProductEditForm(request.POST, request.FILES, instance=edit_product)
-        if edit_form.is_valid():
-            edit_form.save()
-            return HttpResponseRedirect(reverse('admin:products', args=[edit_product.category_id, 1]))
-    else:
-        edit_form = ProductEditForm(instance=edit_product)
+    @method_decorator(user_passes_test(check_is_superuser))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    template_name = 'adminapp/product_update.html'
+    fields = '__all__'
+    # self.kwargs['pk'] - здесь это номер обновляемого продукта 
+
+    def get_category_id(self):
+        return list(Product.objects.filter(id=self.kwargs['pk']))[0].category_id
+
+    def get_success_url(self):
+        return reverse_lazy('admin:products', args=[self.get_category_id(), 1])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'товары/редактирование'
+        context['page'] = self.request.META.get('HTTP_REFERER').split("/")[-2]
+        context['category_id'] = self.get_category_id()
+        return context
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    template_name = 'adminapp/product_update.html'
+    fields = '__all__'
+    # self.kwargs['pk'] - здесь это номер категории, в которой создается продукт 
+
+    def get_initial(self):
+        return {'category': self.kwargs['pk']}
+
+    def get_success_url(self):
+        return reverse_lazy('admin:products', args=[self.kwargs['pk'], 1])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'товары/создание'
+        context['page'] = self.request.META.get('HTTP_REFERER').split("/")[-2]
+        context['category_id'] = self.kwargs['pk']
+        return context
+
+
+class ProductDetailView(DetailView):
+    # self.kwargs['pk'] - здесь это номер просматриваемого продукта 
+    model = Product
+    template_name = 'adminapp/product_read.html'
+
+    def get_category_id(self):
+        return list(Product.objects.filter(id=self.kwargs['pk']))[0].category_id
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'товары/подробнее'
+        context['page'] = self.request.META.get('HTTP_REFERER').split("/")[-2]
+        context['category_id'] = self.get_category_id()
+        return context
+
+
+class ProductDeleteView(DeleteView):
+    # self.kwargs['pk'] - здесь это номер удаляемого продукта 
+    model = Product
+    #template_name = 'adminapp/category_delete.html'
+    success_url = reverse_lazy('admin:categories')
     
-    content = {'title': title, 
-                'update_form': edit_form, 
-                'pk': edit_product.category_id}
-    return render(request, 'adminapp/product_update.html', content)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'продукт/удаление'
+        return context
 
-
-@user_passes_test(check_is_superuser)
-def product_delete(request, pk):
-    title = 'продукт/удаление'
-    del_product = get_object_or_404(Product, pk=pk)
-    if del_product.is_active:  #при первом нажатии на "удалить" меняем статус
-        del_product.is_active = False
-        del_product.save()
-    else:  # при повторном нажатии на "удалить" удаляем товар из БД
-        del_product.delete()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    def form_valid(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.is_active:
+            self.object.is_active = False
+            self.object.save()
+        elif self.get_cnt_product() == 0:
+            self.object.delete()
+        return HttpResponseRedirect(self.get_success_url())

@@ -2,17 +2,23 @@
 {% load static %}
 {% block content %}
 <div class="user_delete">
-    Уверены, что хотите удалить {{ user_to_delete.username }}
-    {% if user_to_delete.first_name %}
-    ({{ user_to_delete.first_name|title }}</b>
-    {% if user_to_delete.last_name %}
-    {{ user_to_delete.last_name|title }}
+    {% if object.is_active %}
+    Уверены, что хотите изменить статус пользователя
+    {% else %}
+    Уверены, что хотите удалить пользователя
+    {% endif %}
+    {{ object.username }}
+    {% if object.first_name %}
+    ({{ object.first_name|title }}</b>
+    {% if object.last_name %}
+    {{ object.last_name|title }}
     {% endif %})
     {% endif %}
     ?
-    <form action="{% url 'admin:user_delete' user_to_delete.pk %}" method="post">
+    <form action="{% url 'admin:user_delete' object.id %}" method="post">
         {% csrf_token %}
-        <input class="btn btn-danger" type="submit" value="удалить">
+        <input class="btn btn-danger" type="submit"
+            value="{% if object.is_active %}изменить статус{% else %}удалить{% endif %}">
     </form>
     <button class="btn btn-success">
         <a href="{% url 'admin:users' %}">Отмена</a>

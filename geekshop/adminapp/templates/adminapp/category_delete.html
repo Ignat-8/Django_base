@@ -1,0 +1,30 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+<div class="user_delete">
+    {% if object.is_active == True %}
+    Уверены, что хотите изменить статус категории <b>{{ object.name }}</b>?<br>
+    К данной категории привязано {{ cnt_products }} шт. товаров.
+    {% elif object.is_active == False and cnt_products == 0 and object.id != 1 %}
+    Уверены, что хотите удалить категорию <b>{{ object.name }}</b>?
+    {% elif object.is_active == False and cnt_products != 0 %}
+    к категории <b>{{ object.name }}</b> привязано {{ cnt_products }} шт. товаров
+    {% endif %}
+    <br><br>
+    <form action="{% url 'admin:category_delete' object.id %}" method="post">
+        {% csrf_token %}
+        {% if object.is_active == True %}
+        <input class="btn btn-danger" type="submit" value="изменить статус">
+        {% elif object.is_active == False and cnt_products == 0 and object.id != 1 %}
+        <input class="btn btn-danger" type="submit" value="удалить">
+        {% elif object.is_active == False and cnt_products != 0 %}
+        Данную категорию нельзя удалить
+        {% elif object.is_active == False and object.id == 1 %}
+        Данную категорию нельзя удалить
+        {% endif %}
+    </form>
+    <button class="btn btn-success">
+        <a href="{% url 'admin:categories' %}">Отмена</a>
+    </button>
+</div>
+{% endblock %}

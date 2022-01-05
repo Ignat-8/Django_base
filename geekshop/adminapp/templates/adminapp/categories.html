@@ -6,6 +6,7 @@
         <a href={% url 'admin:category_create' %}>новая категория</a>
     </button><br><br>
     {% for object in object_list %}
+    {{ object.get_cnt_product }}
     <div class="category_record {% if not object.is_active %}not_active{% endif %}">
         <div class="category_name">
             Имя категории: {{ object.name|title }}

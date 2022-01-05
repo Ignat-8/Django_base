@@ -1,12 +1,11 @@
-from django.shortcuts import get_object_or_404, render, HttpResponseRedirect
+from django.shortcuts import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import user_passes_test
-from django.urls import reverse, reverse_lazy
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from mainapp.models import ProductCategory
-from adminapp.forms import ProductCategoryEditForm
+from mainapp.models import ProductCategory, Product
 
 
 def check_is_superuser(user):
@@ -16,7 +15,7 @@ def check_is_superuser(user):
         return True
 
 
-class CategoryListView(ListView):
+class ProductCategoryListView(ListView):
     model = ProductCategory
     template_name = 'adminapp/categories.html'
     
@@ -44,54 +43,29 @@ class ProductCategoryUpdateView(UpdateView):
         return context
 
 
-#@user_passes_test(check_is_superuser)
-#def categories(request):
-#    title = 'админка/категории'
-#    categories_list = ProductCategory.objects.all()
-#    content = {
-#        'title': title,
-#        'objects': categories_list
-#        }
-#    return render(request, 'adminapp/categories.html', content)
+class ProductCategoryDeleteView(DeleteView):
+    model = ProductCategory
+    template_name = 'adminapp/category_delete.html'
+    success_url = reverse_lazy('admin:categories')
+    
+    def get_cnt_product(self):
+        # количество продуктов в удаляемой категории
+        sql = f'''select id, count(*) as cnt_products
+                  from mainapp_product  
+                  where category_id={self.object.id}'''
+        return Product.objects.raw(sql)[0].cnt_products
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'категории/удаление'
+        context['cnt_products'] = self.get_cnt_product()
+        return context
 
-#@user_passes_test(check_is_superuser)
-#def category_create(request):
-#    title = 'категории/создание'
-#    
-#    if request.method == 'POST':
-#        category_form = ProductCategoryEditForm(request.POST, request.FILES)
-#        if category_form.is_valid():
-#            category_form.save()
-#            return HttpResponseRedirect(reverse('admin:categories'))
-#    else:
-#        category_form = ProductCategoryEditForm()
-#    
-#    content = {'title': title, 'update_form': category_form}
-#    return render(request, 'adminapp/category_update.html', content)
-
-
-#@user_passes_test(check_is_superuser)
-#def category_update(request, pk):
-#    title = 'категории/редактирование'
-#    edit_category = get_object_or_404(ProductCategory, pk=pk)
-#    
-#    if request.method == 'POST':
-#        edit_form = ProductCategoryEditForm(request.POST, request.FILES, instance=edit_category)
-#        if edit_form.is_valid():
-#            edit_form.save()
-#            return HttpResponseRedirect(reverse('admin:category_update', args=[edit_category.pk]))
-#    else:
-#        edit_form = ProductCategoryEditForm(instance=edit_category)
-#    
-#    content = {'title': title, 'update_form': edit_form}
-#    return render(request, 'adminapp/category_update.html', content)
-
-
-@user_passes_test(check_is_superuser)
-def category_delete(request, pk):
-    title = 'категории/удаление'
-    del_category = get_object_or_404(ProductCategory, pk=pk)
-    del_category.is_active = False
-    del_category.save()
-    return HttpResponseRedirect(reverse('admin:categories'))
+    def form_valid(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.is_active:
+            self.object.is_active = False
+            self.object.save()
+        elif self.get_cnt_product() == 0:
+            self.object.delete()
+        return HttpResponseRedirect(self.get_success_url())

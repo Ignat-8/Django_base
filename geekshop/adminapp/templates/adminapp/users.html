@@ -28,7 +28,9 @@
                 <a href={% url 'admin:user_update' object.pk %}>редактировать</a>
             </button>
             <button>
-                <a href={% url 'admin:user_delete' object.pk %}>удалить</a>
+                <a href={% url 'admin:user_delete' object.pk %}>
+                    {% if object.is_active %}изменить статус{% else %}удалить{% endif %}
+                </a>
             </button>
         </div>
         <p>аватар:
