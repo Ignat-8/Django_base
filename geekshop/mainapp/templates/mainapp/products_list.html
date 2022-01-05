@@ -1,0 +1,63 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block div_products %}
+<div class="hero-white">
+    <div class="header clearfix">
+        <a href="/" class="logo"></a>
+        {% include 'mainapp/include/menu.html' %}
+    </div>
+</div>
+
+<div class="details">
+    <div class="links clearfix">
+        {% include 'mainapp/include/products_menu.html' %}
+    </div>
+
+    <div class="">
+        <!-- <div class="title clearfix">
+            <h2> Категория: "{{ category }}" </h2>
+        </div> -->
+        <div class="products_list">
+            {% for product in products %}
+            <div class="block">
+                <a href="{% url 'products:product' product.id %}">
+                    <img src="{% static 'img/' %}{{ product.image }}" alt="product" class="block_img">
+                    <div class="text">
+                        <img src="{% static 'img/icon-hover.png' %}" alt="hover">
+                        <h4>{{ product.name }}</h4>
+                        <p>{{ product.description }}</p>
+                        <p>подробное описание</p>
+                    </div>
+                </a>
+                <div class="block">
+                    <table border="0">
+                        <tr height="90"></tr>
+                        <tr height="20">
+                            <td align="center" width="50">стоимость {{ product.price_format }} руб.</td>
+                        </tr>
+                        {% if user.is_authenticated %}
+                        <tr height="20">
+                            <td align="right" width="50">в корзине {{ product.cart_quantity }} шт.</td>
+                            <td align="center" width="20">
+                                <a href="{% url 'cart:add' product.id %}"
+                                    style="font-size:20pt; text-decoration: none;">+</a>
+                            </td>
+                            <td align="center" width="20">
+                                <a href="{% url 'cart:minus' product.id %}"
+                                    style="font-size:30pt; text-decoration: none;">-</a>
+                            </td>
+                        </tr>
+                        <tr height="20">
+                            <td align="center" width="50">общая стоимость {{ product.total_price }} руб.</td>
+                        </tr>
+                        <tr height="30"></tr>
+                        {% endif %}
+                    </table>
+
+                </div>
+            </div><br>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
