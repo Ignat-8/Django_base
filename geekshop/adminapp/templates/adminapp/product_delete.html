@@ -1,0 +1,25 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+<div class="user_delete">
+    {% if object.is_active == True %}
+    Уверены, что хотите изменить статус продукта <b>{{ object.name }}</b>?<br>
+    {% elif object.is_active == False and check_product_in_cart == False %}
+    Уверены, что хотите удалить продукт <b>{{ object.name }}</b>?
+    {% endif %}
+    <br><br>
+    <form action="{% url 'admin:product_delete' object.id %}" method="post">
+        {% csrf_token %}
+        {% if object.is_active == True %}
+        <input class="btn btn-danger" type="submit" value="изменить статус">
+        {% elif object.is_active == False and check_product_in_cart == False %}
+        <input class="btn btn-danger" type="submit" value="удалить">
+        {% elif object.is_active == False and check_product_in_cart == True %}
+        данный продукт удалить нельзя, т.к. он находится в корзине одного из пользователей
+        {% endif %}
+    </form>
+    <button class="btn btn-success">
+        <a href="{% url 'admin:products' category_id page %}">Отмена</a>
+    </button>
+</div>
+{% endblock %}

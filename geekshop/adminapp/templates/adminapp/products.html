@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="products_list">
-    {% if category != 1 %}
+    {% if category_id != 1 %}
     <button class="new_product">
         <a href={% url 'admin:product_create' category_id %}>новый продукт</a>
     </button>

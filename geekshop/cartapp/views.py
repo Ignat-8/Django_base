@@ -47,17 +47,12 @@ def cart_minus(request, pk):
     product = get_object_or_404(Product, pk=pk)
     cart = Cart.objects.filter(user=request.user, product=product).first()
     
-    if not cart:
-        cart = Cart(user=request.user, product=product)
-    
-    if cart.quantity > 0:
-        cart.quantity -= 1
-        cart.save()
-    elif cart.quantity == 0:
-        try: # чтобы не вылетала программа, когда товара в принципе нет в корзине
+    if cart is not None:
+        if cart.quantity > 0:
+            cart.quantity -= 1
+            cart.save()
+        else:
             cart.delete()
-        except:
-            pass
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
