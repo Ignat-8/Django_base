@@ -1,0 +1,27 @@
+[
+    {
+        "name": "все",
+        "description": "товары всех категорий",
+        "is_active": "True"
+    },
+    {
+        "name": "дом",
+        "description": "домашняя мебель",
+        "is_active": "True"
+    },
+    {
+        "name": "офис",
+        "description": "офисная мебель",
+        "is_active": "True"
+    },
+    {
+        "name": "модерн",
+        "description": "современная мебель",
+        "is_active": "True"
+    },
+    {
+        "name": "классика",
+        "description": "мебель классического стиля",
+        "is_active": "True"
+    }
+]
