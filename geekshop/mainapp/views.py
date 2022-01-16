@@ -4,7 +4,6 @@ import random
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import ProductCategory, Product
-from cartapp.models import Cart
 
 
 path = '..\\geekshop\\mainapp\\templates\\mainapp\\include\\main_menu.json'.replace('\\', os.sep)
@@ -14,10 +13,6 @@ with open(path, 'r', encoding='utf-8') as file:
 
 def main(request):
     title = 'главная'
-    cart = []
-    if request.user.is_authenticated:
-        cart = Cart.objects.filter(user=request.user)
-
     ProductCategories = ProductCategory.objects.filter(is_active=True)
     products = Product.objects.filter(is_active=True)
     pk1 = random.randint(1, len(ProductCategories))
@@ -30,17 +25,12 @@ def main(request):
                             'products2': products[pk2],
                             'pk1':pk1,
                             'pk2':pk2,
-                            'cart':cart
                             })
 
 
 def products(request, pk=None, page=1):
     title = 'продукты'
     productcategories = ProductCategory.objects.filter(is_active=True)
-    
-    cart = []
-    if request.user.is_authenticated:
-        cart = Cart.objects.filter(user=request.user)
 
     if pk is not None:
         if pk==1:
@@ -87,7 +77,6 @@ def products(request, pk=None, page=1):
                                 'products': products_paginator,
                                 'productcategories': productcategories,
                                 'pk': pk,
-                                'cart': cart,
                                 })
 
     products = Product.objects.filter(is_active=True)
@@ -98,7 +87,6 @@ def products(request, pk=None, page=1):
                         context={'main_menu': main_menu,
                                 'title': title,
                                 'productcategories': productcategories,
-                                'cart':cart,
                                 'hot_product': hot_product,
                                 'same_products': same_products
                                 })
@@ -106,14 +94,9 @@ def products(request, pk=None, page=1):
 
 def contact(request):
     title = 'контакты'
-    cart = []
-    if request.user.is_authenticated:
-        cart = Cart.objects.filter(user=request.user)
-
     return render(request, 'mainapp/contact.html',
                   context={'main_menu': main_menu,
                             'title': title,
-                            'cart':cart,
                            'some_list': ['0', '1', '2']
                            })
 
@@ -122,14 +105,10 @@ def product(request, pk):
     title = 'продукты'
     ProductCategories = ProductCategory.objects.filter(is_active=True)
     product = get_object_or_404(Product, pk=pk)
-    cart = []
-    if request.user.is_authenticated:
-        cart = Cart.objects.filter(user=request.user)
 
     return render(request, 'mainapp/product.html', 
                     context = {'title': title,
                                 'main_menu': main_menu,
                                 'product': product,
-                                'cart':cart,
                                 'ProductCategories': ProductCategories,
                         })
