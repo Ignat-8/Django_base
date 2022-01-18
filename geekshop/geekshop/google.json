@@ -1,0 +1,8 @@
+{
+    "client_id": "580620296655-aojrh1v52dbsotglulmrp321nk9auh0a.apps.googleusercontent.com",
+    "project_id": "geekshop-338410",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "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"
+}

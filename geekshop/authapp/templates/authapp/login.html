@@ -16,6 +16,20 @@
     <input class="form-control btn btn-primary" type="submit" value="зарегистрироваться">
 </form>
 <br>
+<button class="btn btn-round form-control">
+    <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/">
+        Вход через ВКонтакте
+    </a>
+</button>
+<br>
+<br>
+<button class="btn btn-round form-control">
+    <a href="{% url 'social:begin' 'google-oauth2' %}">
+        Вход через Google+
+    </a>
+</button>
+<br>
+<br>
 <form class="form-horizontal" action="{% url 'index' %}" method="post">
     {% csrf_token %}
     <input class="form-control btn btn-primary" type="submit" value="на главную">

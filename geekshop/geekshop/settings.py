@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import os
+import os, json
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'mainapp',
     'authapp',
     'cartapp',
-    'adminapp'
+    'adminapp',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +70,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
                 'mainapp.context_processors.cart',
             ],
         },
@@ -160,3 +163,26 @@ EMAIL_HOST_USER = 'admin@localhost'
 # вариант логирования сообщений почты в виде файлов вместо отправки
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = 'tmp/email-messages/'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.vk.VKOAuth2',  # OAuth2 метод, а есть еще OAuth2 Application
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# Загружаем секреты из файла
+with open('../geekshop/geekshop/vk.json', 'r') as f:
+    VK = json.load(f)
+
+with open('../geekshop/geekshop/google.json', 'r') as f:
+    GOOGLE = json.load(f)
+
+SOCIAL_AUTH_URL_NAMESPACE = "social"
+SOCIAL_AUTH_VK_OAUTH2_KEY = VK['SOCIAL_AUTH_VK_OAUTH2_KEY']
+SOCIAL_AUTH_VK_OAUTH2_SECRET = VK['SOCIAL_AUTH_VK_OAUTH2_SECRET']
+
+LOGIN_URL = '/auth/login/google-oauth2/'
+LOGIN_REDIRECT_URL = '/'
+#LOGOUT_REDIRECT_URL = '/'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = GOOGLE['client_id']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = GOOGLE['client_secret']
