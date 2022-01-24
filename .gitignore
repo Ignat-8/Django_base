@@ -1,3 +1,7 @@
+# social secrets
+google.json
+vk.json
+
 # Django #
 *.log
 *.pot
