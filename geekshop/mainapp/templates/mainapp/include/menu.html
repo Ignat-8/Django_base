@@ -1,4 +1,5 @@
 {% load static %}
+<!-- здесь будет выпадающее меню -->
 <ul class="menu">
     {% for link in main_menu %}
     <li><a href="{% url link.href %}" class="{% if request.resolver_match.route == link.route %} active {% endif %}">
