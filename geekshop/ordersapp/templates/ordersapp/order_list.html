@@ -48,8 +48,7 @@
     <a href="{% url 'index' %}">на главную</a>
 </button>
 <button class="btn btn-default btn-round">
-    <!-- {% comment %}<a href="{% url 'ordersapp:order_create' %}"> {% endcomment %}-->
-    <a href="">новый</a>
+    <a href="{% url 'ordersapp:order_create' %}">новый заказ</a>
 </button>
 <button class="btn btn-default btn-round">
     <a href="{% url 'cart:view' %}">корзина</a>
