@@ -45,13 +45,14 @@
             <td align="center">{{ cart.0.total_cost }}</td>
         </tr>
     </table><br>
-    <form class="form-horizontal" action="{% url 'products:index' %}" method="post">
-        {% csrf_token %}
-        <input class="form-control btn btn-primary" type="submit" value="к списку товаров">
-    </form>
-    <form class="form-horizontal" action="{% url 'index' %}" method="post">
-        {% csrf_token %}
-        <input class="form-control btn btn-primary" type="submit" value="на главную">
-    </form>
+    <button class="btn btn-default btn-round">
+        <a href="{% url 'order:order_create' %}">оформить заказ</a>
+    </button>
+    <button class="btn btn-default btn-round">
+        <a href="{% url 'products:index' %}">к списку товаров</a>
+    </button>
+    <button class="btn btn-default btn-round">
+        <a href="{% url 'index' %}">на главную</a>
+    </button>
 </div>
 {% endblock %}

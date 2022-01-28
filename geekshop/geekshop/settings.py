@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'cartapp',
     'adminapp',
     'social_django',
+    'ordersapp'
 ]
 
 MIDDLEWARE = [

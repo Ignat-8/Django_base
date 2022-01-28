@@ -11,6 +11,10 @@ class Cart(models.Model):
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)
     add_datetime = models.DateTimeField(verbose_name='время', auto_now_add=True)
 
+    @classmethod
+    def get_items(self, user):
+        return Cart.objects.filter(user=user)
+
     @property
     def product_price(self):
         return  '{:,.2f}'.format(self.product.price).replace(',',' ')
