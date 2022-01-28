@@ -7,6 +7,8 @@ from django.views.generic.detail import DetailView
 from cartapp.models import Cart
 from ordersapp.models import Order, OrderItem
 from ordersapp.forms import OrderItemForm
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class OrderList(ListView):
@@ -41,8 +43,6 @@ class OrderItemsCreate(CreateView):
                                 for num, form in enumerate(formset.forms):
                                         form.initial['product'] = cart_items[num].product
                                         form.initial['quantity'] = cart_items[num].quantity
-
-                                cart_items.delete()
                         else:
                                 formset = OrderFormSet()
                 data['orderitems'] = formset
@@ -57,6 +57,8 @@ class OrderItemsCreate(CreateView):
                         if orderitems.is_valid():
                                 orderitems.instance = self.object
                                 orderitems.save()
+                        cart_items = Cart.get_items(self.request.user)
+                        cart_items.delete()  # удаляем корзину в случае сохранения заказа!!!
 
                 # удаляем пустой заказ
                 if self.object.get_total_cost() == 0:
@@ -70,7 +72,7 @@ class OrderItemsUpdate(UpdateView):
         success_url = reverse_lazy('ordersapp:orders_list')
 
         def get_context_data(self, **kwargs):
-                data = super(OrderItemsCreate, self).get_context_data(**kwargs)
+                data = super(OrderItemsUpdate, self).get_context_data(**kwargs)
                 OrderFormSet = inlineformset_factory(Order, 
                                                 OrderItem,
                                                 form=OrderItemForm, 
@@ -95,7 +97,7 @@ class OrderItemsUpdate(UpdateView):
                 # удаляем пустой заказ
                 if self.object.get_total_cost() == 0:
                         self.object.delete()
-                return super(OrderItemsCreate, self).form_valid(form)
+                return super(OrderItemsUpdate, self).form_valid(form)
 
 
 class OrderDelete(DeleteView):
@@ -116,6 +118,15 @@ def order_forming_complete(request, pk):
         order = get_object_or_404(Order, pk=pk)
         order.status = Order.SENT_TO_PROCEED
         order.save()
+
+        verify_link = reverse('order:orders_list')
+        title = f'Заказ пользователя {request.user.username}'
+        message = (f"Вы совершили заказ № {order.pk} на портале {settings.DOMAIN_NAME}.\n" + 
+                f"Общая сумма заказа {order.get_total_cost()}.\n"
+                f"Для просмотра заказа перейдите по ссылке:\n" + 
+                f"{settings.DOMAIN_NAME}{verify_link}")
+
+        send_mail(title, message, settings.EMAIL_HOST_USER, [request.user.email], fail_silently=False)
         return HttpResponseRedirect(reverse('ordersapp:orders_list'))
 
 
