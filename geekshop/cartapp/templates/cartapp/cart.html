@@ -11,10 +11,9 @@
     <p>Корзина пользователя <b>{{ user }}</b>.</p><br>
     <table border="1">
         <tr>
-            <td width="150" align="center">Название товара</td>
-            <td width="50" align="center">кол-во</td>
-            <td width="90" align="center">увеличить</td>
-            <td width="90" align="center">уменьшить</td>
+            <td width="100" align="center">Название товара</td>
+            <td width="50" align="center">количество</td>
+            <td width="90" align="center">изменить количество</td>
             <td width="150" align="center">цена за шт, руб</td>
             <td width="150" align="center">общая стоимость, руб</td>
         </tr>
@@ -23,14 +22,18 @@
             <td width="50" align="center">{{ el.product.name }}</td>
             <td width="50" align="center">{{ el.quantity }}</td>
             <td width="90" align="center">
-                <a href="{% url 'cart:add' el.product_id %}" style="text-decoration: none;">+</a>
-            </td>
-            <td width="90" align="center">
-                {% if el.quantity != 0 %}
-                <a href="{% url 'cart:minus' el.product_id %}" style="text-decoration: none;">-</a>
-                {% else %}
-                <a href="{% url 'cart:remove' el.product_id %}" style="text-decoration: none;">удалить</a>
+                {% if el.product.quantity > el.quantity %}
+                <!-- ограничиваем количество товаров числом на складе -->
+                <a href="{% url 'cart:add' el.product_id %}" style="text-decoration: none;">
+                    <b><span style="font-size: 18px;"> + </span></b>
+                </a> /
                 {% endif %}
+                {% if el.quantity != 0 %}
+                <a href="{% url 'cart:minus' el.product_id %}" style="text-decoration: none;">
+                    <b><span style="font-size: 20px;"> - </span></b>
+                </a> /
+                {% endif %}
+                <a href="{% url 'cart:remove' el.product_id %}" style="text-decoration: none;"> удалить</a>
             </td>
             <td width="150" align="center">{{ el.product_price }}</td>
             <td width="150" align="center">{{ el.product_cost }}</td>
@@ -39,7 +42,6 @@
         <tr>
             <td align="center">Итого</td>
             <td align="center">{{ cart.0.total_quantity }}</td>
-            <td></td>
             <td></td>
             <td></td>
             <td align="center">{{ cart.0.total_cost }}</td>
