@@ -47,14 +47,23 @@ class Order(models.Model):
         items = self.orderitems.select_related()
         return sum(list(map(lambda x: x.quantity * x.product.price, items)))
     
-    # переопределяем метод, удаляющий объект
     def delete(self):
-        for item in self.orderitems.select_related():
-            item.product.quantity += item.quantity
-            item.product.save()
+        # нет надобности возвращать товар на склад, т.к. заказ не был оформлен
+        # необходимо возвращать товар на склад при удалении оформленного заказа из админки
         self.is_active = False
         self.save()
-        
+
+    def reserve_product(self):
+        # резервируем товар на складе, т.е. в БД
+        for item in self.orderitems.select_related():
+            if (item.product.quantity - item.quantity) >= 0:
+                item.product.quantity -= item.quantity
+                item.product.save()
+            else:
+                return False
+        return True
+
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, 
                             related_name="orderitems", 
@@ -68,3 +77,4 @@ class OrderItem(models.Model):
 
     def get_product_cost(self):
         return self.product.price * self.quantity
+    

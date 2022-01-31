@@ -5,9 +5,15 @@
 <button class="btn btn-default btn-round form-control last">
     <a href="{% url 'ordersapp:order_delete' object.pk %}">удалить</a>
 </button>
+<button class="btn btn-default btn-round form-control last">
+    <a href="{% url 'ordersapp:order_update' object.pk %}">редактировать</a>
+</button>
 {% endif %}
 <button class="btn btn-info btn-round form-control last">
     <a href="{% url 'ordersapp:orders_list' %}">к списку заказов</a>
+</button>
+<button class="btn btn-info btn-round form-control last">
+    <a href="{% url 'cart:view' %}">корзина</a>
 </button>
 <button class="btn btn-default btn-round form-control last">
     <a href="{% url 'index' %}">на главную</a>

@@ -45,14 +45,14 @@ def cart_add(request, pk):
 @login_required
 def cart_minus(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    cart = Cart.objects.filter(user=request.user, product=product).first()
+    cart_record = Cart.objects.filter(user=request.user, product=product).first()
     
-    if cart is not None:
-        if cart.quantity > 0:
-            cart.quantity -= 1
-            cart.save()
+    if cart_record is not None:
+        if cart_record.quantity > 0:
+            cart_record.quantity -= 1
+            cart_record.save()
         else:
-            cart.delete()
+            cart_record.delete()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

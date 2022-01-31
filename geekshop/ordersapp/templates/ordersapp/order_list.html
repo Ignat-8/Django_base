@@ -1,6 +1,7 @@
 {% extends 'ordersapp/base.html' %}
 {% load static %}
 {% block content %}
+{{ form.non_field_errors }}
 <div class="h2 text-center head">
     Ваши заказы,
     {% if user.first_name %}
