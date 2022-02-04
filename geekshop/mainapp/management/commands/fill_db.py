@@ -1,8 +1,8 @@
-from django.core.management.base import BaseCommand
-from mainapp.models import ProductCategory, Product
-from django.contrib.auth.models import User
 import json, os
+from django.core.management.base import BaseCommand
+from django.contrib.auth.models import User
 from django.db import connection
+from mainapp.models import ProductCategory, Product
 from authapp.models import ShopUser
 
 JSON_PATH = 'mainapp/json'
