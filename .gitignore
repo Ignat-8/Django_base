@@ -9,6 +9,7 @@ vk.json
 __pycache__
 db.sqlite3
 data.json
+db.json
 media
 
 # Backup files # 
