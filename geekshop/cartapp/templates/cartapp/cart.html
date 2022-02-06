@@ -1,1 +1,63 @@
-it works!
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block cart %}
+<div class="hero_cart">
+    <div class="header clearfix">
+        <a href="/" class="logo"></a>
+        {% include 'mainapp/include/menu.html' %}
+    </div>
+</div><br>
+<div class="">
+    <p>Корзина пользователя <b>{{ user }}</b>.</p><br>
+    <table border="1">
+        <tr>
+            <td width="100" align="center">Название товара</td>
+            <td width="50" align="center">количество</td>
+            <td width="90" align="center">изменить количество</td>
+            <td width="150" align="center">цена за шт, руб</td>
+            <td width="150" align="center">общая стоимость, руб</td>
+        </tr>
+        {% for el in cart %}
+        <tr>
+            <td width="50" align="center">{{ el.product.name }}</td>
+            <td width="50" align="center">{{ el.quantity }}</td>
+            <td width="90" align="center">
+                {% if el.product.quantity > el.quantity %}
+                <!-- ограничиваем количество товаров числом на складе -->
+                <a href="{% url 'cart:add' el.product_id %}" style="text-decoration: none;">
+                    <b><span style="font-size: 18px;"> + </span></b>
+                </a> /
+                {% endif %}
+                {% if el.quantity != 0 %}
+                <a href="{% url 'cart:minus' el.product_id %}" style="text-decoration: none;">
+                    <b><span style="font-size: 20px;"> - </span></b>
+                </a> /
+                {% endif %}
+                <a href="{% url 'cart:remove' el.product_id %}" style="text-decoration: none;"> удалить</a>
+            </td>
+            <td width="150" align="center">{{ el.product_price }}</td>
+            <td width="150" align="center">{{ el.product_cost }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td align="center">Итого</td>
+            <td align="center">{{ cart.0.total_quantity }}</td>
+            <td></td>
+            <td></td>
+            <td align="center">{{ cart.0.total_cost }}</td>
+        </tr>
+    </table><br>
+    <button class="btn btn-default btn-round">
+        <a href="{% url 'order:order_create' %}">оформить заказ</a>
+    </button>
+    <button class="btn btn-default btn-round">
+        <a href="{% url 'order:orders_list' %}">к списку заказов</a>
+    </button>
+    <button class="btn btn-default btn-round">
+        <a href="{% url 'products:index' %}">к списку товаров</a>
+    </button>
+    <button class="btn btn-default btn-round">
+        <a href="{% url 'index' %}">на главную</a>
+    </button>
+</div>
+{% endblock %}

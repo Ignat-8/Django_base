@@ -10,12 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import os
+import os, json, sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -24,9 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-gtk7h7zz7dzkg8+r#%hw3o&o^d&1-&6q6##smulez--x+tm08a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if len(sys.argv) > 2:
+    # if sys.argv[2] == '--insecure':
+        DEBUG = True
+else:
+    DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
 
 # Application definition
@@ -41,7 +45,10 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'mainapp',
     'authapp',
-    'cartapp'
+    'cartapp',
+    'adminapp',
+    'social_django',
+    'ordersapp'
 ]
 
 MIDDLEWARE = [
@@ -53,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'geekshop.urls'
@@ -68,6 +76,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+                'mainapp.context_processors.cart',
             ],
         },
     },
@@ -81,8 +92,14 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        #--------------------------------------------
+        'NAME': 'geekshop',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'django',
+        'PASSWORD': 'geekbrains',
+        'HOST': 'localhost'
     }
 }
 
@@ -141,3 +158,61 @@ AUTH_USER_MODEL = 'authapp.ShopUser'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+# for decorator @login_required
+LOGIN_URL = '/auth/login/'
+
+# Mail
+# вариант python -m smtpd -n -c DebuggingServer localhost:25
+# EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
+DOMAIN_NAME = 'http://localhost:8000'
+#EMAIL_HOST = 'localhost'
+#EMAIL_PORT = '25'
+EMAIL_HOST_USER = 'admin@localhost'
+# EMAIL_HOST_PASSWORD = 'geekshop'
+#EMAIL_USE_SSL = False
+
+# вариант логирования сообщений почты в виде файлов вместо отправки
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = 'tmp/email-messages/'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.vk.VKOAuth2',  # OAuth2 метод, а есть еще OAuth2 Application
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# Загружаем секреты из файла
+with open('../geekshop/geekshop/vk.json', 'r') as f:
+    VK = json.load(f)
+
+with open('../geekshop/geekshop/google.json', 'r') as f:
+    GOOGLE = json.load(f)
+
+SOCIAL_AUTH_URL_NAMESPACE = "social"
+SOCIAL_AUTH_VK_OAUTH2_KEY = VK['SOCIAL_AUTH_VK_OAUTH2_KEY']
+SOCIAL_AUTH_VK_OAUTH2_SECRET = VK['SOCIAL_AUTH_VK_OAUTH2_SECRET']
+SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+LOGIN_URL = '/auth/login/google-oauth2/'
+LOGIN_REDIRECT_URL = '/'
+#LOGOUT_REDIRECT_URL = '/'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = GOOGLE['client_id']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = GOOGLE['client_secret']
+
+LOGIN_ERROR_URL = '/'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.create_user',
+    'authapp.pipeline.save_user_profile',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+

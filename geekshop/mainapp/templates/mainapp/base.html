@@ -5,8 +5,13 @@
 <head>
     <meta charset="utf-8">
     <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'fonts/font-awesome/css/font-awesome.css' %}">
+    {% block js %}
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% endblock %}
 </head>
 
 <body>
@@ -18,6 +23,12 @@
         {% endblock %}
 
         {% block div_products %}
+        {% endblock %}
+
+        {% block product %}
+        {% endblock %}
+
+        {% block cart %}
         {% endblock %}
         <div class="clr"></div>
     </div>

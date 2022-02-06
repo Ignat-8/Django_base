@@ -1,0 +1,55 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load my_tags %}
+{% block content %}
+<div class="products_list">
+    {% if category_id != 1 %}
+    <button class="new_product">
+        <a href={% url 'admin:product_create' category_id %}>новый продукт</a>
+    </button>
+    <br><br>
+    {% endif %}
+    <div class="paginator">
+        <h3>Навигация по категории {{ category_name }} (id={{ category_id }})</h3>
+        {% if page_obj.has_previous %}
+        <a href="{% url 'admin:products' category_id page_obj.previous_page_number %}">
+            < </a>
+                {% endif %}
+                <span class="current">
+                    страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                </span>
+                {% if page_obj.has_next %}
+                <a href="{% url 'admin:products' category_id page_obj.next_page_number %}"> > </a>
+                {% endif %}
+    </div>
+    <br><br>
+    <div class="tab-content">
+        {% for object in object_list %}
+        <div class="product_record {% if not object.is_active %}not_active{% endif %}">
+            <div class="product_name">{{ object.name|title }}</div>
+            <img src="{{ object.image|media_folder_products }}" alt="{{ object.name }}" class="block_img">
+            <div class="product_actions">
+                <button>
+                    <a href={% url 'admin:product_read' object.pk %}>подробнее</a>
+                </button>
+                <button>
+                    <a href={% url 'admin:product_update' object.pk %}>редактировать</a>
+                </button>
+                <button>
+                    <a href={% url 'admin:product_delete' object.pk %}>удалить</a>
+                </button>
+            </div>
+            <div class="summary">
+                <p><b>цена</b> - {{ object.price }} руб<br>
+                    <b>количество</b> - {{ object.quantity }} шт.<br>
+                    <b>статус is_active: </b>{{ object.is_active }}
+                </p>
+            </div>
+            <div class="product_desc">
+                <b>Описание: </b>{{ object.short_desc|title }}
+            </div>
+        </div>
+        {% endfor%}
+    </div>
+</div>
+{% endblock %}

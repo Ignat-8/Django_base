@@ -10,7 +10,9 @@
 		<h3 class="green">тенденции</h3>
 		<h3 class="big"> удобные стулья</h3>
 		<p>Новый уровень комфорта. Отличные характеристики.</p>
-		<a href="#" class="button-order">заказать <img src="{% static 'img/arrow.png' %}" alt=""></a>
+		<a href="#" class="button-order">заказать
+			<img src="{% static 'img/arrow.png' %}" alt="">
+		</a>
 	</div>
 	<div class="navi">
 		<a href="#"></a><a href="#"></a><a href="#"></a>
@@ -28,7 +30,7 @@
 	<div class="tab-content">
 		<div class="block">
 			<a href="{% url 'products:index' %}{{ products1.category_id }}">
-				<img src="{% static 'img/' %}{{ products1.image }}" alt="" class="block_img">
+				<img src="/media/{{ products1.image }}" alt="" class="block_img">
 				<div class="text">
 					<img src="{% static 'img/icon-hover.png' %}" alt="img">
 					<h4>{{ products1.short_desc }}</h4>
@@ -38,7 +40,7 @@
 		</div>
 		<div class="block">
 			<a href="{% url 'products:index' %}{{ products2.category_id }}">
-				<img src="{% static 'img/' %}{{ products2.image }}" alt="" class="block_img">
+				<img src="/media/{{ products2.image }}" alt="" class="block_img">
 				<div class="text">
 					<img src="{% static 'img/icon-hover.png' %}" alt="">
 					<h4>{{ products2.short_desc }}</h4>

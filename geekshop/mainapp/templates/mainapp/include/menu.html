@@ -8,21 +8,33 @@
     {% endfor %}
     {% if user.is_authenticated %}
     <li>
-        <a href="{% url 'auth:logout' %}" class="">
-            {{ 'выйти' }} ({{ user }})
-        </a>
-        <a href="{% url 'auth:edit' %}" class="">
-            {{ 'профиль' }} ({{ user }})
-        </a>
+        <div class="dropdown">
+            <a class="dropdown-toggle" href="" data-toggle="dropdown">
+                {{ user.first_name|default:'Пользователь' }}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="{% url 'auth:edit' %}">профиль</a>
+                </li>
+                <li>
+                    <a href="{% url 'cart:view' %}">корзина</a>
+                </li>
+                <li>
+                    <a href="{% url 'order:orders_list' %}">заказы</a>
+                </li>
+                {% if user.is_superuser %}
+                <li>
+                    <a href="{% url 'admin:users' %}">админка</a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{% url 'auth:logout' %}" class="">{{ 'выйти' }}</a>
+                </li>
+            </ul>
+        </div>
     </li>
-    <li>
-        <a href="{% url 'cart:view' %}" class="cart">
-            <img src="{% static 'img/cart.jpg' %}">
-            <span>
-                ({% if cart %} {{ cart|length }} {% endif %})
-            </span>
-        </a>
-    </li>
+
     {% else %}
     <li>
         <a href="{% url 'auth:login' %}" class="">
