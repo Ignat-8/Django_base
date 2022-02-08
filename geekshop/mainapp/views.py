@@ -14,7 +14,7 @@ with open(path, 'r', encoding='utf-8') as file:
 def main(request):
     title = 'главная'
     ProductCategories = ProductCategory.objects.filter(is_active=True)
-    products = Product.objects.filter(is_active=True)
+    products = Product.objects.filter(is_active=True).select_related()
     pk1 = random.randint(1, len(ProductCategories))
     pk2 = random.randint(1, len(ProductCategories))
     return render(request, 'mainapp/index.html', 
