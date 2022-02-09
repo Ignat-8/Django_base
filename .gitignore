@@ -11,6 +11,7 @@ db.sqlite3
 data.json
 db.json
 media
+staticfiles
 
 # Backup files # 
 *.bak 
