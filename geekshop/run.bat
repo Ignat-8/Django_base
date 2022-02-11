@@ -1,3 +1,3 @@
 cd ../Scripts
-python.exe ../geekshop/manage.py runserver --insecure
+python.exe ../geekshop/manage.py runserver
 pause
