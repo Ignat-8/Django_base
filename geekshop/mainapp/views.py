@@ -34,7 +34,7 @@ def products(request, pk=None, page=1):
 
     if pk is not None:
         if pk==1:
-            category = 'все'
+            # category = 'все'
             sql = f'''select t1.*, case when t2.quantity is null then 0 else t2.quantity end as cart_quantity
                             , case when t2.id is null then 0 else t2.quantity*t1.price end as total_price
                       from mainapp_product t1
@@ -45,8 +45,8 @@ def products(request, pk=None, page=1):
 			                     where sh.username='{request.user}') t2 on t2.product_id=t1.id
                         where t1.is_active=True and t3.is_active=True'''
         else:
-            category = get_object_or_404(ProductCategory, pk=pk, is_active=True)
-            #products = Product.objects.filter(category__pk=pk).order_by('price')
+            # category = get_object_or_404(ProductCategory, pk=pk, is_active=True)
+            # products = Product.objects.filter(category__pk=pk).order_by('price')
             sql = f'''select t1.*, case when t2.quantity is null then 0 else t2.quantity end as cart_quantity
                             , case when t2.id is null then 0 else t2.quantity*t1.price end as total_price
                       from mainapp_product t1
@@ -73,7 +73,7 @@ def products(request, pk=None, page=1):
         return render(request, 'mainapp/products_list.html',
                         context={'main_menu': main_menu,
                                 'title': title,
-                                'category': category,
+                                # 'category': category,
                                 'products': products_paginator,
                                 'productcategories': productcategories,
                                 'pk': pk,
