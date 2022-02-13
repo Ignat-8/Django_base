@@ -23,7 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-gtk7h7zz7dzkg8+r#%hw3o&o^d&1-&6q6##smulez--x+tm08a"
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = False if os.environ.get('PROD') else True
+print('PROD = ', os.environ.get('PROD'))
+DEBUG = False if os.environ.get('PROD') is not None else True
+print('DEBUG = ', DEBUG)
 
 ALLOWED_HOSTS = ["*"]
 # ALLOWED_HOSTS = ["127.0.0.1","localhost"]
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django_extensions',
     "debug_toolbar",
     "template_profiler_panel",
     "mainapp",
