@@ -1,9 +1,9 @@
 http://v975759.hosted-by-vdsina.ru/
 http://v975759.hosted-by-vdsina.ru/contact/
 http://v975759.hosted-by-vdsina.ru/products/
-http://v975759.hosted-by-vdsina.ru/products/category/1
-http://v975759.hosted-by-vdsina.ru/products/category/2
-http://v975759.hosted-by-vdsina.ru/products/category/3
+http://v975759.hosted-by-vdsina.ru/products/category/1/page/1
+http://v975759.hosted-by-vdsina.ru/products/category/2/page/1
+http://v975759.hosted-by-vdsina.ru/products/category/3/page/1
 http://v975759.hosted-by-vdsina.ru/products/product/1
 http://v975759.hosted-by-vdsina.ru/products/product/2
 http://v975759.hosted-by-vdsina.ru/products/product/3
