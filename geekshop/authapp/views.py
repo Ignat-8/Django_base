@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db import transaction
+from django.contrib.auth.decorators import login_required
 
 
 def send_verify_mail(user):
@@ -83,6 +84,7 @@ def verify(request, email, activation_key):
         return HttpResponseRedirect(reverse('index'))
 
 
+@login_required
 @transaction.atomic
 def edit(request):
     title = 'редактирование'
