@@ -4,6 +4,7 @@ import random
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import ProductCategory, Product
+from django.conf import settings
 
 
 path = '..\\geekshop\\mainapp\\templates\\mainapp\\include\\main_menu.json'.replace('\\', os.sep)
@@ -25,6 +26,7 @@ def main(request):
                             'products2': products[pk2],
                             'pk1':pk1,
                             'pk2':pk2,
+                            'DEBUG': settings.DEBUG
                             })
 
 
