@@ -15,7 +15,5 @@ http://v975759.hosted-by-vdsina.ru/order/read/3
 http://v975759.hosted-by-vdsina.ru/order/update/1
 http://v975759.hosted-by-vdsina.ru/order/update/2
 http://v975759.hosted-by-vdsina.ru/order/update/3
-http://v975759.hosted-by-vdsina.ru/auth/edit/
-http://v975759.hosted-by-vdsina.ru/auth/logout/
 http://v975759.hosted-by-vdsina.ru/auth/register/
 

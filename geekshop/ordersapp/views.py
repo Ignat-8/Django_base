@@ -75,6 +75,10 @@ class OrderItemsCreate(CreateView):
                 if self.object.get_total_cost() == 0:
                         self.object.delete()
                 return super(OrderItemsCreate, self).form_valid(form)
+        
+        @method_decorator(login_required())
+        def dispatch(self, *args, **kwargs):
+                return super(CreateView, self).dispatch(*args, **kwargs)
 
 
 class OrderItemsUpdate(UpdateView):
@@ -134,11 +138,19 @@ class OrderItemsUpdate(UpdateView):
                 if self.object.get_total_cost() == 0:
                         self.object.delete()
                 return super(OrderItemsUpdate, self).form_valid(form)
-
+        
+        @method_decorator(login_required())
+        def dispatch(self, *args, **kwargs):
+                return super(UpdateView, self).dispatch(*args, **kwargs)
+        
 
 class OrderDelete(DeleteView):
         model = Order
         success_url = reverse_lazy('ordersapp:orders_list')
+
+        @method_decorator(login_required())
+        def dispatch(self, *args, **kwargs):
+                return super(DeleteView, self).dispatch(*args, **kwargs)
 
 
 class OrderRead(DetailView):
@@ -147,6 +159,10 @@ class OrderRead(DetailView):
                 context = super(OrderRead, self).get_context_data(**kwargs)
                 context['title'] = 'заказ/просмотр'
                 return context
+
+        @method_decorator(login_required())
+        def dispatch(self, *args, **kwargs):
+                return super(DetailView, self).dispatch(*args, **kwargs)
 
 
 def order_forming_complete(request, pk):
